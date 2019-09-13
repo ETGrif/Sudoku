@@ -19,23 +19,29 @@ public class SudokuSolver
 
 				Board board = new Board(testBoardValues);
 
-				for (int row = 0; row < 9; row++)
-					{
-						for (int col = 0; col < 9; col++)
-							{
-								int temp = board.getSquare(row, col).getValue();
-								if (temp != -1)
-									{
-										System.out.print(temp);
-									}
-								else
-									{
-										System.out.print(" ");
-									}
-
-							}
-						System.out.println();
-					}
+				
+//				//print
+//				for (int row = 0; row < 9; row++)
+//					{
+//						for (int col = 0; col < 9; col++)
+//							{
+//								int temp = board.getSquare(row, col).getValue();
+//								if (temp != -1)
+//									{
+//										System.out.print(temp);
+//									}
+//								else
+//									{
+//										System.out.print(" ");
+//									}
+//
+//							}
+//						System.out.println();
+//					}
+				
+				solve(board);
+				
+				
 
 			}
 
@@ -52,35 +58,117 @@ public class SudokuSolver
 		public static void solve(Board board)
 			{
 
-				int consecutiveActions = 0;
-				while(consecutiveActions < 81){
-					
-					for(int row = 0; row < 9; row++){
-						for(int col = 0; col < 9; col++){
-							
-							boolean didAction = false;
-							boolean[] possibleValues = board.getSquare(row, col).getPossibleValues();
-							
-							//for each number
-							for(int i = 0; i < possible){
-								
+				int consecutiveActions = 1;
+				while (consecutiveActions !=0)
+					{
+						System.out.println("running again! consecutiveActions = "+consecutiveActions);
+
+						consecutiveActions=0;
+
+						for (int row = 0; row < 9; row++)
+							{
+							for (int col = 0; col < 9; col++)
+									{
+
+										if (board.getSquare(row, col).getValue()== -1)
+											{
+												System.out.println("Currently tracing: ("+row+", "+col+")");
+												boolean didAction = false;
+												boolean[] possibleValues = board.getSquare(row, col)
+														.getPossibleValues();
+												
+												
+												
+												
+												// for each possible number
+												for (int i = 0; i < 9; i++)
+													{
+														//test prints all the possible values:
+//														System.out.println(possibleValues[i]);
+														if (possibleValues[i])
+															{
+																// trace row
+																for (int traceCol = 0; traceCol < 9; traceCol++)
+																	{
+																		if (board.getSquare(row, traceCol).getValue() == (i + 1))
+																			{
+																				board.getSquare(row, col)
+																						.setPossibleValue(false, i);
+																				didAction = true;
+																				
+
+																			}
+
+																	}
+
+																// trace col
+																for (int traceRow = 0; traceRow < 9; traceRow++)
+																	{
+																		if (board.getSquare(traceRow, col)
+																				.getValue() == (i + 1))
+																			{
+																				board.getSquare(row, col)
+																						.setPossibleValue(false, i);
+																				didAction = true;
+																			}
+
+																	}
+
+																//trace box
+																Square[][] box = getBox(board, row, col);
+
+																for(int boxRow = 0; boxRow < 3;boxRow++){
+																	for(int boxCol = 0; boxCol < 3; boxCol++){
+																		
+																		if (box[boxRow][boxCol]
+																				.getValue() == (i + 1))
+																			{
+																				board.getSquare(row, col)
+																						.setPossibleValue(false, i);
+																				didAction = true;
+																			}
+																		
+																		
+																	}
+																}
+																
+																
+															}
+
+													}
+
+												if (didAction)
+													{
+														consecutiveActions++;
+													}
+
+											}
+									}
 							}
-							
-							
-							
-							
-							
-						}
+
 					}
-					
-					
-					
-					
-					
-				}
-				
-				
-				
+
 			}
 
+		
+		public static Square[][] getBox(Board board, int row, int col){
+			
+			int boxRow = (int)(((double)row / 9.0) * 3)*3;
+			int boxCol = (int)(((double)col / 9.0) * 3)*3;
+
+			Square[][] box = new Square[3][3];
+			
+			for(int i = 0; i < 3;i++){
+				for(int j = 0; j < 3; j++){
+					
+//					System.out.println("Box includes ("+(boxRow+i)+", "+(boxCol+j)+")");
+					box[i][j] = board.getSquare(boxRow+i, boxCol+j);
+					
+				}
+									
+			}
+			return box;
+		}
+		
+		
 	}
