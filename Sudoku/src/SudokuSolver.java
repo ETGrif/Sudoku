@@ -16,9 +16,22 @@ public class SudokuSolver
 							{ -1, 2, 9, -1, -1, -1, -1, -1, 8 },
 							{ -1, -1, 4, 6, 9, -1, 1, 7, 3 },
 							{ -1, -1, -1, -1, -1, 1, -1, -1, 4 } };
+				
+				// medium
+				// |  92  7         6  659138 26 7    35 2473  1    65  9  7      6 5 86    18  9 37 
+				// Hard
+				// | 7 3 5    6 7 45    4 2 6   1     6  52 3   9   5     7   8 4     6   7   19    8			
+				
+				
+				
 
-				Board board = new Board(testBoardValues);
+//				Board board = new Board(testBoardValues);
+				
+				
+				System.out.println("Input board:");
+				Board board = Board.importFromText();
 
+				Board.print(board);
 				
 //				//print
 //				for (int row = 0; row < 9; row++)
@@ -40,6 +53,9 @@ public class SudokuSolver
 //					}
 				
 				solve(board);
+				
+				Board.print(board);
+				
 				
 				
 
@@ -72,7 +88,7 @@ public class SudokuSolver
 
 										if (board.getSquare(row, col).getValue()== -1)
 											{
-												System.out.println("Currently tracing: ("+row+", "+col+")");
+//												System.out.println("Currently tracing: ("+row+", "+col+")");
 												boolean didAction = false;
 												boolean[] possibleValues = board.getSquare(row, col)
 														.getPossibleValues();
@@ -137,11 +153,26 @@ public class SudokuSolver
 
 													}
 
+												//count up the action counter
 												if (didAction)
 													{
 														consecutiveActions++;
 													}
 
+												//mark permanent values
+												int numberOfPossibleValues = 0;
+												int mostRecentPV = -1;
+												for(int i = 0; i <9; i++){
+													if(possibleValues[i]){
+														numberOfPossibleValues++;
+														mostRecentPV = i +1;
+													}
+												}
+												if(numberOfPossibleValues == 1){
+													board.getSquare(row, col).setValue(mostRecentPV);
+												}
+												
+												
 											}
 									}
 							}
