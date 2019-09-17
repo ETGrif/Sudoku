@@ -15,6 +15,11 @@ public class Square
 							{
 								possibleValues[i] = true;
 							}
+					}else{
+						for (int i = 0; i < 9; i++)
+							{
+								possibleValues[i] = false;
+							}
 					}
 			}
 
@@ -26,6 +31,7 @@ public class Square
 		public void setValue(int value)
 			{
 				this.value = value;
+				this.clearPossibleValues();
 			}
 
 		public boolean[] getPossibleValues()
@@ -48,4 +54,13 @@ public class Square
 				return (possibleValues[n]);
 
 			}
+		
+		public void clearPossibleValues(){
+			for(boolean b: this.possibleValues){
+				b = false;
+			}
+			 
+			
+			
+		}
 	}

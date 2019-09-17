@@ -1,3 +1,4 @@
+import sun.util.resources.ar.CurrencyNames_ar_TN;
 
 public class SudokuSolver
 	{
@@ -89,8 +90,9 @@ public class SudokuSolver
 										if (board.getSquare(row, col).getValue()== -1)
 											{
 //												System.out.println("Currently tracing: ("+row+", "+col+")");
+												Square currentSquare = board.getSquare(row, col);
 												boolean didAction = false;
-												boolean[] possibleValues = board.getSquare(row, col)
+												boolean[] possibleValues =currentSquare
 														.getPossibleValues();
 												
 												
@@ -108,7 +110,7 @@ public class SudokuSolver
 																	{
 																		if (board.getSquare(row, traceCol).getValue() == (i + 1))
 																			{
-																				board.getSquare(row, col)
+																				currentSquare
 																						.setPossibleValue(false, i);
 																				didAction = true;
 																				
@@ -123,7 +125,7 @@ public class SudokuSolver
 																		if (board.getSquare(traceRow, col)
 																				.getValue() == (i + 1))
 																			{
-																				board.getSquare(row, col)
+																				currentSquare
 																						.setPossibleValue(false, i);
 																				didAction = true;
 																			}
@@ -139,7 +141,7 @@ public class SudokuSolver
 																		if (box[boxRow][boxCol]
 																				.getValue() == (i + 1))
 																			{
-																				board.getSquare(row, col)
+																				currentSquare
 																						.setPossibleValue(false, i);
 																				didAction = true;
 																			}
@@ -170,74 +172,78 @@ public class SudokuSolver
 													}
 												}
 												if(numberOfPossibleValues == 1){
-													board.getSquare(row, col).setValue(mostRecentPV);
+													currentSquare.setValue(mostRecentPV);
 												}
 												
-												// if it is the only possible value for this:
-												// row
-												// for each possible number in this square check how many of the same
-												// type are in the row
-												for (int i = 0; i < 9; i++)
-													{
-														if (possibleValues[i])
-															{
-																int totalOccurances = 0;
-																for (int j = 0; j < 9; j++)
-																	{
-																		if (board.getSquare(row, j)
-																				.getPossibleValues()[i])
-																			{
-																				totalOccurances++;
+												if(currentSquare.getValue()==-1){
+												 //if it is the only possible value for this:
+												//for each possible number
+												for(int i = 0; i <9; i++){
+													//in rowS
+//													System.out.println("testA:"+row + col);
+													if(possibleValues[i]){
+//														System.out.println("testB"+i);
+														//check if only in row
+														int totalOccurances = 0;
+														for(int scanCol = 0; scanCol < 9; scanCol++){
+//															System.out.println("testC");
+															if(board.getSquare(row, scanCol).getPossibleValues()[i]){
+//																System.out.println(".");
+																totalOccurances++;
+															}
+															
+														}
+//														System.out.println("testD:" + totalOccurances);
+														if(totalOccurances == 1){
+															currentSquare.setValue(i +1);
+														}
+														
+														
+														
+														//in col
+														System.out.println("testA:"+row + col);
+														if(possibleValues[i]){
+															System.out.println("testB"+i);
+															//check if only in row
+															totalOccurances = 0;
+															for(int scanRow = 0; scanRow < 9; scanRow++){
+																System.out.println("testC");
+																if(board.getSquare(scanRow, col).getPossibleValues()[i]){
+																	System.out.println(".");
+																	totalOccurances++;
+																}
+																
+																
+																
+															}
+															System.out.println("testD:" + totalOccurances);
+															if(totalOccurances == 1){
+																currentSquare.setValue(i +1);
+															}
+														
+														
+														
+														
+														
+														
+														
+														
+														
+														
 																			}
-																	}
-																if (totalOccurances == 1)
-																	{
-																		board.getSquare(row, col).setValue(i + 1);
-																		System.out.println("TestA");
 
 																	}
 
 															}
 
 													}
-
-												// col
-												// for each possible number in this square check how many of the same
-												// type are in the row
-												for (int i = 0; i < 9; i++)
-													{
-														if (possibleValues[i])
-															{
-																int totalOccurances = 0;
-																for (int j = 0; j < 9; j++)
-																	{
-																		if (board.getSquare(j, col)
-																				.getPossibleValues()[i])
-																			{
-																				totalOccurances++;
-																			}
-																	}
-																if (totalOccurances == 1)
-																	{
-																		board.getSquare(row, col).setValue(i + 1);
-																		System.out.println("TestB");
-
-																	}
-
-															}
-
-													}
-												
-												
-												
 											}
 									}
-							}
 
+							}
 					}
 
 			}
-
 		
 		public static Square[][] getBox(Board board, int row, int col){
 			
