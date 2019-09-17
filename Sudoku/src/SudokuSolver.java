@@ -160,6 +160,7 @@ public class SudokuSolver
 													}
 
 												//mark permanent values
+												// if there is only one possible value for the square
 												int numberOfPossibleValues = 0;
 												int mostRecentPV = -1;
 												for(int i = 0; i <9; i++){
@@ -171,6 +172,62 @@ public class SudokuSolver
 												if(numberOfPossibleValues == 1){
 													board.getSquare(row, col).setValue(mostRecentPV);
 												}
+												
+												// if it is the only possible value for this:
+												// row
+												// for each possible number in this square check how many of the same
+												// type are in the row
+												for (int i = 0; i < 9; i++)
+													{
+														if (possibleValues[i])
+															{
+																int totalOccurances = 0;
+																for (int j = 0; j < 9; j++)
+																	{
+																		if (board.getSquare(row, j)
+																				.getPossibleValues()[i])
+																			{
+																				totalOccurances++;
+																			}
+																	}
+																if (totalOccurances == 1)
+																	{
+																		board.getSquare(row, col).setValue(i + 1);
+																		System.out.println("TestA");
+
+																	}
+
+															}
+
+													}
+
+												// col
+												// for each possible number in this square check how many of the same
+												// type are in the row
+												for (int i = 0; i < 9; i++)
+													{
+														if (possibleValues[i])
+															{
+																int totalOccurances = 0;
+																for (int j = 0; j < 9; j++)
+																	{
+																		if (board.getSquare(j, col)
+																				.getPossibleValues()[i])
+																			{
+																				totalOccurances++;
+																			}
+																	}
+																if (totalOccurances == 1)
+																	{
+																		board.getSquare(row, col).setValue(i + 1);
+																		System.out.println("TestB");
+
+																	}
+
+															}
+
+													}
+												
 												
 												
 											}
