@@ -222,7 +222,7 @@ public class SudokuSolver
 																	totalOccurances++;
 																}
 																
-																//
+															
 																
 															}
 //															System.out.println("testD:" + totalOccurances);
@@ -230,17 +230,34 @@ public class SudokuSolver
 																currentSquare.setValue(i +1);
 															}
 														
+																	}
 														
+														//in box
+//														System.out.println("testA:"+row + col);
+														if(possibleValues[i]){
+															int totalOccurances;
+//															System.out.println("testB"+i);
+															//check if only in row
+															totalOccurances = 0;
+															Square[][] box = getBox(board, row, col);
+															for(int scanRow = 0; scanRow < 3; scanRow++){
+																for(int scanCol = 0; scanCol < 3; scanCol++){
+//																System.out.println("testC");
+																if(box[scanRow][scanCol].getPossibleValues()[i]){
+//																	System.out.println(".");
+																	totalOccurances++;
+																}
+																
+															
+																
+															}
+															}
+//															System.out.println("testD:" + totalOccurances);
+															if(totalOccurances == 1){
+																currentSquare.setValue(i +1);
+															}
 														
-														
-														
-														
-														
-														
-														
-														
-																			}
-
+																	}
 																	
 
 															}
