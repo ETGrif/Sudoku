@@ -55,12 +55,33 @@ public class Square
 
 			}
 		
-		public void clearPossibleValues(){
-			for(boolean b: this.possibleValues){
-				b = false;
+		public void clearPossibleValues()
+			{
+				boolean[] possibleValues2 = this.possibleValues;
+				for (int i = 0; i < possibleValues2.length; i++)
+					{
+						possibleValues2[i] = false;
+					}
+
 			}
-			 
+		
+		public static void info(int row, int col){
+			Square square = SudokuSolver.solvedBoard.getSquare(row, col);
+			System.out.println("Info on ("+row+", "+col+"):\n"
+					+ "Current Value:");
+			System.out.println(square.getValue());
+			System.out.println("Possible values:");
+			for(int i = 0; i < 9; i++){
+				if(square.getPossibleValues()[i]){
+					System.out.println(i+1);
+				}
+			}
+			
+			
 			
 			
 		}
+		
+		
+		
 	}

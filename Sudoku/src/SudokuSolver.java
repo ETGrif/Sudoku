@@ -3,6 +3,8 @@ import sun.util.resources.ar.CurrencyNames_ar_TN;
 public class SudokuSolver
 	{
 
+		public static Board solvedBoard;
+		
 		public static void main(String[] args)
 			{
 
@@ -34,6 +36,9 @@ public class SudokuSolver
 
 				Board.print(board);
 				
+				
+				
+				
 //				//print
 //				for (int row = 0; row < 9; row++)
 //					{
@@ -56,6 +61,9 @@ public class SudokuSolver
 				solve(board);
 				
 				Board.print(board);
+				
+				solvedBoard = board;
+				Square.info(0, 4);
 				
 				
 				
@@ -199,24 +207,25 @@ public class SudokuSolver
 														}
 														
 														
-														
+													}
 														//in col
-														System.out.println("testA:"+row + col);
+//														System.out.println("testA:"+row + col);
 														if(possibleValues[i]){
-															System.out.println("testB"+i);
+															int totalOccurances;
+//															System.out.println("testB"+i);
 															//check if only in row
 															totalOccurances = 0;
 															for(int scanRow = 0; scanRow < 9; scanRow++){
-																System.out.println("testC");
+//																System.out.println("testC");
 																if(board.getSquare(scanRow, col).getPossibleValues()[i]){
-																	System.out.println(".");
+//																	System.out.println(".");
 																	totalOccurances++;
 																}
 																
 																
 																
 															}
-															System.out.println("testD:" + totalOccurances);
+//															System.out.println("testD:" + totalOccurances);
 															if(totalOccurances == 1){
 																currentSquare.setValue(i +1);
 															}
@@ -232,7 +241,7 @@ public class SudokuSolver
 														
 																			}
 
-																	}
+																	
 
 															}
 
