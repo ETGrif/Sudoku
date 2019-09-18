@@ -222,7 +222,7 @@ public class SudokuSolver
 																	totalOccurances++;
 																}
 																
-																
+																//
 																
 															}
 //															System.out.println("testD:" + totalOccurances);
