@@ -4,71 +4,59 @@ public class SudokuSolver
 	{
 
 		public static Board solvedBoard;
-		
+
 		public static void main(String[] args)
 			{
-				
+
 				// medium
-				// |  92  7         6  659138 26 7    35 2473  1    65  9  7      6 5 86    18  9 37 
+				// | 92 7 6 659138 26 7 35 2473 1 65 9 7 6 5 86 18 9 37
 				// Hard
-				// | 7 3 5    6 7 45    4 2 6   1     6  52 3   9   5     7   8 4     6   7   19    8			
-				
-				
-				
+				// | 7 3 5 6 7 45 4 2 6 1 6 52 3 9 5 7 8 4 6 7 19 8
+
 				System.out.println("Input board:");
 				Board board = Board.importFromText();
 
-				
 				Board.print(board);
-				
-				
+
 				solve(board);
-				
-				
+
 				Board.print(board);
-				
+
 				solvedBoard = board;
-				
-//				for(int row = 0; row < 3; row++){
-//					for(int col = 6; col < 9; col++){
-//						Square.info(row, col);
-//						
-//					}
-//					
-//				}
-				
-				
-				
-				
+
+				// for(int row = 0; row < 3; row++){
+				// for(int col = 6; col < 9; col++){
+				// Square.info(row, col);
+				//
+				// }
+				//
+				// }
 
 			}
 
 		static int consecutiveActions = 1;
+
 		public static void solve(Board board)
 			{
 
-				
 				int timesRun = 0;
-				while (consecutiveActions !=0)
+				while (consecutiveActions != 0)
 					{
 						timesRun++;
 
-						consecutiveActions=0;
+						consecutiveActions = 0;
 
-						//scan each square
+						// scan each square
 						scanEachSquare(board);
-						
-						//scan for lines
-							
-						//scan for Disjoint Pairs + clean
-						
-						//scan for X-Wing??
-						
-						
-						
-						
-						
-						
+
+						// scan for lines
+						findLines(board);
+
+						// scan for Disjoint Pairs + clean box + clean row(if
+						// necessary)
+
+						// scan for X-Wing??
+
 					}
 				System.out.println("Ran " + timesRun + " times.\n");
 
@@ -96,111 +84,102 @@ public class SudokuSolver
 					}
 				return box;
 			}
-		
-		public static void scanEachSquare(Board board){
-			
-			for (int row = 0; row < 9; row++){
-			for (int col = 0; col < 9; col++)
+
+		public static void scanEachSquare(Board board)
+			{
+
+				for (int row = 0; row < 9; row++)
 					{
-
-						if (board.getSquare(row, col).getValue()== -1)
+						for (int col = 0; col < 9; col++)
 							{
-//								System.out.println("Currently tracing: ("+row+", "+col+")");
-								Square currentSquare = board.getSquare(row, col);
-								boolean didAction = false;
-								boolean[] possibleValues =currentSquare
-										.getPossibleValues();
-								
-								
-								
-								//remove possible values
-								// for each possible number
-								for (int i = 0; i < 9; i++)
+
+								if (board.getSquare(row, col).getValue() == -1)
 									{
-										//test prints all the possible values:
-//										System.out.println(possibleValues[i]);
-										if (possibleValues[i])
+										// System.out.println("Currently
+										// tracing: ("+row+", "+col+")");
+										Square currentSquare = board.getSquare(row, col);
+										boolean didAction = false;
+										boolean[] possibleValues = currentSquare.getPossibleValues();
+
+										// remove possible values
+										// for each possible number
+										for (int i = 0; i < 9; i++)
 											{
-												// trace row
-												for (int traceCol = 0; traceCol < 9; traceCol++)
+												// test prints all the possible
+												// values:
+												// System.out.println(possibleValues[i]);
+												if (possibleValues[i])
 													{
-														if (board.getSquare(row, traceCol).getValue() == (i + 1))
+														// trace row
+														for (int traceCol = 0; traceCol < 9; traceCol++)
 															{
-																currentSquare
-																		.setPossibleValue(false, i);
-																didAction = true;
-																
-
-															}
-
-													}
-
-												// trace col
-												for (int traceRow = 0; traceRow < 9; traceRow++)
-													{
-														if (board.getSquare(traceRow, col)
-																.getValue() == (i + 1))
-																							{
-																currentSquare
-																		.setPossibleValue(false, i);
-																didAction = true;
-															}
-													
-
-													}
-
-												// trace box
-												Square[][] box = getBox(board, row, col);
-
-												for (int boxRow = 0; boxRow < 3; boxRow++)
-													{
-														for (int boxCol = 0; boxCol < 3; boxCol++)
-															{
-
-																if (box[boxRow][boxCol]
+																if (board.getSquare(row, traceCol)
 																		.getValue() == (i + 1))
 																	{
-																		currentSquare.setPossibleValue(
-																				false, i);
+																		currentSquare.setPossibleValue(false, i);
+																		didAction = true;
+
+																	}
+
+															}
+
+														// trace col
+														for (int traceRow = 0; traceRow < 9; traceRow++)
+															{
+																if (board.getSquare(traceRow, col)
+																		.getValue() == (i + 1))
+																	{
+																		currentSquare.setPossibleValue(false, i);
 																		didAction = true;
 																	}
 
 															}
+
+														// trace box
+														Square[][] box = getBox(board, row, col);
+
+														for (int boxRow = 0; boxRow < 3; boxRow++)
+															{
+																for (int boxCol = 0; boxCol < 3; boxCol++)
+																	{
+
+																		if (box[boxRow][boxCol].getValue() == (i + 1))
+																			{
+																				currentSquare.setPossibleValue(false,
+																						i);
+																				didAction = true;
+																			}
+
+																	}
+															}
+
 													}
 
 											}
 
+										// count up the action counter
+										if (didAction)
+											{
+												consecutiveActions++;
+											}
+
+										// mark permanent values
+										// one poss value in square
+										markOnePoss(currentSquare);
+
+										// only poss square in row, col, or box
+										if (currentSquare.getValue() == -1)
+											{
+												markTraceOnePoss(board, row, col);
+											}
+
 									}
-
-								// count up the action counter
-								if (didAction)
-									{
-										consecutiveActions++;
-									}
-
-								// mark permanent values
-								//one poss value in square
-								markOnePoss(currentSquare);
-
-								
-								//only poss square in row, col, or box
-								if (currentSquare.getValue() == -1)
-									{
-										markTraceOnePoss(board, row, col);
-									}
-								
-								
-								
-								
-
 							}
 					}
+
 			}
-			
-			
-		}
-		
- 		public static void markOnePoss(Square currentSquare)
+
+		public static void markOnePoss(Square currentSquare)
 			{
 
 				int numberOfPossibleValues = 0;
@@ -218,7 +197,7 @@ public class SudokuSolver
 						currentSquare.setValue(mostRecentPV);
 					}
 			}
-		
+
 		public static void markTraceOnePoss(Board board, int row, int col)
 			{
 
@@ -317,5 +296,60 @@ public class SudokuSolver
 					}
 
 			}
+
+		public static void findLines(Board board)
+			{
+				// for each box
+				for (int boxRow = 0; boxRow < 3; boxRow++)
+					{
+						for (int boxCol = 0; boxCol < 3; boxCol++)
+							{
+								Square[][] box = getBox(board, boxRow * 3, boxCol * 3);
+
+								// for each number
+								for (int n = 1; n <= 9; n++)
+									{
+
+										// rows
+										int rowOccurances = 0;
+										int mostRecentIndex=-1;
+										// for each row in box
+										for (int row = 0; row < 3; row++)
+											{
+												// for each col in row
+												for (int col = 0; col < 3; col++)
+													{
+
+														if(box[row][col].getValue()==n){
+															rowOccurances++;
+															mostRecentIndex = row;
+														}
+														
+														
+													}
+											}
+										
+										//if there is only one occurance, trace that row
+										if(rowOccurances == 1){
+											traceRow(board, mostRecentIndex+(boxRow*3), n);
+										}
+
+									}
+
+							}
+					}
+
+			}
+
+		public static void traceRow(Board board, int row, int n){
+		
+			for(int col = 0; col<9; col++){
+				board.getSquare(row, col).setPossibleValue(false, n-1);
+				
+				
+			}
+			
+			
+		}
 		
 	}
