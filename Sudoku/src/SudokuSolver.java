@@ -9,10 +9,9 @@ public class SudokuSolver
 			{
 
 				// medium
-				// | 92 7 6 659138 26 7 35 2473 1 65 9 7 6 5 86 18 9 37
+				// |  92  7         6  659138 26 7    35 2473  1    65  9  7      6 5 86    18  9 37 
 				// Hard
-				// | 7 3 5 6 7 45 4 2 6 1 6 52 3 9 5 7 8 4 6 7 19 8
-
+				// | 7 3 5    6 7 45    4 2 6   1     6  52 3   9   5     7   8 4     6   7   19    8
 				System.out.println("Input board:");
 				Board board = Board.importFromText();
 
@@ -50,7 +49,7 @@ public class SudokuSolver
 						scanEachSquare(board);
 
 						// scan for lines
-						findLines(board);
+//						findLines(board);
 
 						// scan for Disjoint Pairs + clean box + clean row(if
 						// necessary)
@@ -307,7 +306,7 @@ public class SudokuSolver
 								Square[][] box = getBox(board, boxRow * 3, boxCol * 3);
 
 								// for each number
-								for (int n = 1; n <= 9; n++)
+								for (int n = 0; n < 9; n++)
 									{
 
 										// rows
@@ -316,22 +315,29 @@ public class SudokuSolver
 										// for each row in box
 										for (int row = 0; row < 3; row++)
 											{
+												int occurances=0;
 												// for each col in row
 												for (int col = 0; col < 3; col++)
 													{
 
-														if(box[row][col].getValue()==n){
-															rowOccurances++;
+														
+														if(box[row][col].getPossibleValues()[n]){
+															occurances++;
 															mostRecentIndex = row;
 														}
 														
 														
 													}
+												if(occurances>0){
+													rowOccurances++;
+												}
 											}
 										
 										//if there is only one occurance, trace that row
 										if(rowOccurances == 1){
 											traceRow(board, mostRecentIndex+(boxRow*3), n);
+//											System.out.println("test: "+boxRow+":"+boxCol);
+											
 										}
 
 									}
@@ -344,7 +350,7 @@ public class SudokuSolver
 		public static void traceRow(Board board, int row, int n){
 		
 			for(int col = 0; col<9; col++){
-				board.getSquare(row, col).setPossibleValue(false, n-1);
+				board.getSquare(row, col).setPossibleValue(false, n);
 				
 				
 			}
